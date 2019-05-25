@@ -26,4 +26,8 @@ HELP.md
 /build/
 
 ### VS Code ###
+<<<<<<< HEAD
 .vscode/logs//
+=======
+.vscode/
+>>>>>>> development
