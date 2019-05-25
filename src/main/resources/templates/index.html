@@ -15,11 +15,14 @@
 <main role="main" class="container">
 
     <div class="starter-template">
-        <h1>Spring Boot Web Thymeleaf Example</h1>
-        <h2>
-            <span th:text="'Hello, ' + ${username}"></span>
-        </h2>
+        <span th:text="${username}"></span> <a href="/logout">logout</a>
     </div>
+
+    Pizzas:
+
+    <p th:each="pizza : ${pizzas}"
+       th:text="${pizza.info}"></p>
+
 
 </main>
 <script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
