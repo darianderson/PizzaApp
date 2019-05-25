@@ -18,10 +18,21 @@
         <span th:text="${username}"></span> <a href="/logout">logout</a>
     </div>
 
-    Pizzas:
+    <h2>Pizza</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each = "pizza: ${pizzas}">
+            <td th:text="${pizza.info}">info</td>
+            <td th:text="${pizza.size}">size</td>
+            <td th:text="${pizza.price}">price</td>
+        </tr>
 
-    <p th:each="pizza : ${pizzas}"
-       th:text="${pizza.info}"></p>
+    </table>
+
 
 
 </main>

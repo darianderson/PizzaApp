@@ -13,7 +13,6 @@ import java.util.Map;
 public class PizzaDAOImpl implements PizzaDAO {
 
 
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -26,12 +25,12 @@ public class PizzaDAOImpl implements PizzaDAO {
 
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
         for (Map row : rows) {
-            Pizza employee = new Pizza();
-            employee.setIdPizza(Integer.parseInt(String.valueOf(row.get("idPizza"))));
-            employee.setInfo((String)row.get("info"));
-            employee.setPrice(Integer.parseInt(String.valueOf(row.get("price"))));
-            employee.setSize(Integer.parseInt(String.valueOf(row.get("size"))));
-            pizzas.add(employee);
+            Pizza pizza = new Pizza();
+            pizza.setIdPizza(Integer.parseInt(String.valueOf(row.get("idPizza"))));
+            pizza.setInfo((String) row.get("info"));
+            pizza.setSize(Integer.parseInt(String.valueOf(row.get("size"))));
+            pizza.setPrice(Integer.parseInt(String.valueOf(row.get("price"))));
+            pizzas.add(pizza);
         }
 
         return pizzas;
@@ -44,6 +43,7 @@ public class PizzaDAOImpl implements PizzaDAO {
 
     @Override
     public void add(Pizza pizza) {
+
 
     }
 
