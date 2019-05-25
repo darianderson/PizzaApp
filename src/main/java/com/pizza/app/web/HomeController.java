@@ -7,11 +7,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller("/")
 public class HomeController {
 
-    @GetMapping("/index")
-    public ModelAndView getHomePage(){
-        ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("username", "hahahahahahahhahahaa");
-        return modelAndView;
+    @GetMapping
+    public ModelAndView home() {
+        return new ModelAndView("redirect:/pizza");
+    }
+
+
+    @GetMapping("/login")
+    public ModelAndView login(){
+        return new ModelAndView("login-view");
     }
 
 }
