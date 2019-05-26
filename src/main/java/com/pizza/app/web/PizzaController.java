@@ -15,17 +15,16 @@ public class PizzaController {
     @Autowired
     private PizzaDAO pizzaDAO;
 
-    @GetMapping("/")
+    @GetMapping("/pizza")
     public ModelAndView getPizza() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
+
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("pizzas", pizzaDAO.get());
+
         modelAndView.addObject("username", username);
         return modelAndView;
     }
-
-
-
 
 }
