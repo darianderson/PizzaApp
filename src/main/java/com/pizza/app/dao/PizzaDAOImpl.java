@@ -1,54 +1,64 @@
 package com.pizza.app.dao;
 
+import com.pizza.app.dao.mapper.PizzaRowMapper;
 import com.pizza.app.entity.Pizza;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class PizzaDAOImpl implements PizzaDAO {
 
-
+    private static final String SQL_UPDATE = "insert into pizza(id,info,size,price) values(?,?,?,?)";
+    private static final String SQL_GET_LIST = "select * from pizza";
+    private static final String SQL_DELETE = "delete from pizza where id = ?";
+    private static final String SQL_GET_PIZZA = "select * from pizza where id=?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     @Override
     public List<Pizza> get() {
-        String sql = "SELECT * FROM pizza";
-
-        List<Pizza> pizzas = new ArrayList<>();
-
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-        for (Map row : rows) {
-            Pizza employee = new Pizza();
-            employee.setIdPizza(Integer.parseInt(String.valueOf(row.get("idPizza"))));
-            employee.setInfo((String)row.get("info"));
-            employee.setPrice(Integer.parseInt(String.valueOf(row.get("price"))));
-            employee.setSize(Integer.parseInt(String.valueOf(row.get("size"))));
-            pizzas.add(employee);
-        }
-
-        return pizzas;
+        return jdbcTemplate.query(SQL_GET_LIST, new PizzaRowMapper());
     }
 
     @Override
     public Pizza get(int id) {
-        return null;
+        return jdbcTemplate.queryForObject(
+                SQL_GET_PIZZA,
+                new Object[]{id}, new PizzaRowMapper());
     }
 
     @Override
     public void add(Pizza pizza) {
-
+        KeyHolder holder = new GeneratedKeyHolder();
+        jdbcTemplate.update(generatePreparedStatementCreator(pizza, SQL_UPDATE), holder);
     }
 
     @Override
     public void delete(int id) {
-
+        jdbcTemplate.update(SQL_DELETE, id);
     }
+
+    private PreparedStatementCreator generatePreparedStatementCreator(final Pizza pizza, final String sql) {
+        return connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, pizza.getId());
+            ps.setString(2, pizza.getInfo());
+            ps.setInt(3, pizza.getSize());
+            ps.setInt(4, pizza.getPrice());
+            return ps;
+        };
+    }
+
 }
+
+

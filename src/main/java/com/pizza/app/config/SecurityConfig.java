@@ -1,79 +1,53 @@
 package com.pizza.app.config;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
+import org.springframework.lang.Nullable;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
 
 import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource("classpath:persistence-mysql.properties")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private Environment env;
+	private static final String DEFAULT_PASSWORD = "{bcrypt}$2a$04$eFytJDGtjbThXa80FyOOBuFdK2IwjyWefYkMpiBEFlpBwDH.5PM0K";
 
-    @Autowired
-    private DataSource dataSource;
+	private static final String ROLE_USER = "USER";
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/authenticate")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
-    }
+	private static final String ROLE_ADMIN = "ADMIN";
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource);
-    }
+	private final DataSource dataSource;
 
-    @Primary
-    @Bean
-    public DataSource securityDataSource() {
+	@Autowired(required = false)
+	public SecurityConfig(@Nullable DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication().dataSource(dataSource);
+	}
 
-        try {
-            dataSource.setDriverClass(env.getProperty("jdbc.driver"));
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
-
-        dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
-        dataSource.setUser(env.getProperty("jdbc.user"));
-        dataSource.setPassword(env.getProperty("jdbc.password"));
-
-        dataSource.setInitialPoolSize(
-                getIntProperty("connection.pool.initialPoolSize"));
-        dataSource.setMinPoolSize(
-                getIntProperty("connection.pool.minPoolSize"));
-        dataSource.setMaxPoolSize(
-                getIntProperty("connection.pool.maxPoolSize"));
-        dataSource.setMaxIdleTime(
-                getIntProperty("connection.pool.maxIdleTime"));
-
-        return dataSource;
-    }
-    private int getIntProperty(String propName) {
-        return Integer.valueOf(env.getProperty(propName));
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+		.authorizeRequests()
+        .antMatchers("/resources/**").permitAll()
+		.antMatchers("/orders/**").hasRole(ROLE_ADMIN)
+		.anyRequest().authenticated()
+		.and()
+			.formLogin()
+			.loginPage("/login")
+			.loginProcessingUrl("/authentication")
+			.permitAll()
+		.and()
+			.logout()
+			.permitAll();
+	}
 }
