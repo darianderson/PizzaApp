@@ -1,73 +1,66 @@
 package com.pizza.app.dao;
 
+import com.pizza.app.dao.mapper.PizzaRowMapper;
 import com.pizza.app.entity.Pizza;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
 public class PizzaDAOImpl implements PizzaDAO {
 
+    private static final String SQL_UPDATE = "insert into pizza(idPizza,info,size,price) values(?,?,?,?)";
+    private static final String SQL_GET_LIST = "select * from pizza";
+    private static final String SQL_DELETE = "delete from pizza where idPizza = ?";
+    private static final String SQL_GET_PIZZA = "select * from pizza where idPizza=?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    //private SessionFactory sessionFactory;
 
     @Override
     public List<Pizza> get() {
-        return jdbcTemplate.query("select * from pizza", new PizzaRowMaper());
+        return jdbcTemplate.query(SQL_GET_LIST, new PizzaRowMapper());
     }
 
     @Override
     public Pizza get(int id) {
         return jdbcTemplate.queryForObject(
-                "select * from pizza where idPizza=?",
-                new Object[]{id}, new PizzaRowMaper());
+                SQL_GET_PIZZA,
+                new Object[]{id}, new PizzaRowMapper());
     }
 
     @Override
     public Pizza add(Pizza pizza) {
-        final String sql = "insert into pizza(idPizza,info,size,price) values(?,?,?,?)";
-
         KeyHolder holder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setInt(1, pizza.getIdPizza());
-                ps.setString(2, pizza.getInfo());
-                ps.setInt(3, pizza.getSize());
-                ps.setInt(4, pizza.getPrice());
-                return ps;
-            }
-        }, holder);
+        jdbcTemplate.update(generatePreparedStatementCreator(pizza, SQL_UPDATE), holder);
         return pizza;
     }
 
     @Override
     public void delete(int id) {
-        String SQL = "delete from pizza where idPizza = ?";
-        jdbcTemplate.update(SQL, id);
+        jdbcTemplate.update(SQL_DELETE, id);
     }
+
+    private PreparedStatementCreator generatePreparedStatementCreator(final Pizza pizza, final String sql) {
+        return connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, pizza.getIdPizza());
+            ps.setString(2, pizza.getInfo());
+            ps.setInt(3, pizza.getSize());
+            ps.setInt(4, pizza.getPrice());
+            return ps;
+        };
+    }
+
 }
 
-class PizzaRowMaper implements RowMapper<Pizza> {
-    @Override
-    public Pizza mapRow(ResultSet resultSet, int i) throws SQLException {
-        Pizza pizza = new Pizza();
-        pizza.setIdPizza(resultSet.getInt("idPizza"));
-        pizza.setInfo(resultSet.getString("info"));
-        pizza.setSize(resultSet.getInt("size"));
-        pizza.setPrice(resultSet.getInt("price"));
-
-        return pizza;
-    }
-}
 
