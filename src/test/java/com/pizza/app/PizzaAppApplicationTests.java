@@ -38,8 +38,8 @@ public class PizzaAppApplicationTests {
 	@Test
 	public void createUser() {
 		Pizza pizza = new Pizza(6, "Onion", 50,70);
-		Pizza savedPizza= pizzaDAO.add(pizza);
-		Pizza newPizza = pizzaDAO.get(savedPizza.getIdPizza());
+		pizzaDAO.add(pizza);
+		Pizza newPizza = pizzaDAO.get(pizza.getId());
 		assertNotNull(newPizza);
 		assertEquals("Onion", newPizza.getInfo());
 		assertEquals(70, newPizza.getPrice());

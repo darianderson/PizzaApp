@@ -10,7 +10,7 @@ public class PizzaRowMapper implements RowMapper<Pizza> {
     @Override
     public Pizza mapRow(ResultSet resultSet, int i) throws SQLException {
         Pizza pizza = new Pizza();
-        pizza.setIdPizza(resultSet.getInt("id"));
+        pizza.setId(resultSet.getInt("id"));
         pizza.setInfo(resultSet.getString("info"));
         pizza.setSize(resultSet.getInt("size"));
         pizza.setPrice(resultSet.getInt("price"));

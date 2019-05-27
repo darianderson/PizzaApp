@@ -9,7 +9,7 @@ public class HomeController {
 
     @GetMapping
     public ModelAndView home() {
-        return new ModelAndView("redirect:/pizza");
+        return new ModelAndView("redirect:/pizza/");
     }
 
 

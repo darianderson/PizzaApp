@@ -17,14 +17,13 @@ import java.util.List;
 @Repository
 public class PizzaDAOImpl implements PizzaDAO {
 
-    private static final String SQL_UPDATE = "insert into pizza(idPizza,info,size,price) values(?,?,?,?)";
+    private static final String SQL_UPDATE = "insert into pizza(id,info,size,price) values(?,?,?,?)";
     private static final String SQL_GET_LIST = "select * from pizza";
-    private static final String SQL_DELETE = "delete from pizza where idPizza = ?";
-    private static final String SQL_GET_PIZZA = "select * from pizza where idPizza=?";
+    private static final String SQL_DELETE = "delete from pizza where id = ?";
+    private static final String SQL_GET_PIZZA = "select * from pizza where id=?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    //private SessionFactory sessionFactory;
 
     @Override
     public List<Pizza> get() {
@@ -39,10 +38,9 @@ public class PizzaDAOImpl implements PizzaDAO {
     }
 
     @Override
-    public Pizza add(Pizza pizza) {
+    public void add(Pizza pizza) {
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(generatePreparedStatementCreator(pizza, SQL_UPDATE), holder);
-        return pizza;
     }
 
     @Override
@@ -53,7 +51,7 @@ public class PizzaDAOImpl implements PizzaDAO {
     private PreparedStatementCreator generatePreparedStatementCreator(final Pizza pizza, final String sql) {
         return connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, pizza.getIdPizza());
+            ps.setInt(1, pizza.getId());
             ps.setString(2, pizza.getInfo());
             ps.setInt(3, pizza.getSize());
             ps.setInt(4, pizza.getPrice());

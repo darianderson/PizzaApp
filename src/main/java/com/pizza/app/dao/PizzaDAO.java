@@ -7,6 +7,6 @@ import java.util.List;
 public interface PizzaDAO {
     List<Pizza> get();
     Pizza get(int id);
-    Pizza add(Pizza pizza);
+    void add(Pizza pizza);
     void delete(int id);
 }
