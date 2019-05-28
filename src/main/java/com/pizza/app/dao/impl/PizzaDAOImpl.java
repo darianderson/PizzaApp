@@ -42,7 +42,7 @@ public class PizzaDAOImpl implements PizzaDAO {
 
     @Override
     public void add(Pizza pizza) {
-        if(get(pizza.getId()) != null) {
+        if(pizza.getId() !=0 && get(pizza.getId()) != null) {
             update(pizza);
             return;
         }

@@ -41,7 +41,7 @@ public class DrinkDAOImpl implements DrinkDAO {
 
     @Override
     public void add(Drink drink) {
-        if (get(drink.getId()) != null) {
+        if (drink.getId() != 0 && get(drink.getId()) != null) {
             update(drink);
             return;
         }

@@ -12,34 +12,54 @@
 </head>
 
 <body>
+
 <main role="main" class="container">
 
     <header th:insert="snippets/header.html :: header"></header>
     <script>$("#ul-pizza").addClass("active")</script>
 
-    <table class="custom-table">
-        <tr>
-            <th>id</th>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Price</th>
-            <th>edit</th>
-            <th>delete</th>
-        </tr>
-        <tr th:each="pizza: ${pizzas}">
-            <td th:text="${pizza.id}">id</td>
-            <td th:text="${pizza.info}">info</td>
-            <td th:text="${pizza.size}">size</td>
-            <td th:text="${pizza.price}">price</td>
-            <td><a th:href="@{'edit/' + ${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/metro/26/000000/pencil.png"></a> </td>
-            <td><a th:href="@{'delete/' + ${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a> </td>
-        </tr>
+    <div class="col-md-8" style="margin-top: 30px;">
+        <table class="custom-table">
+            <tr>
+                <th>id</th>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Price</th>
+                <th>edit</th>
+                <th>delete</th>
+            </tr>
+            <tr th:each="pizza: ${pizzas}">
+                <td th:text="${pizza.id}">id</td>
+                <td th:text="${pizza.info}">info</td>
+                <td th:text="${pizza.size}">size</td>
+                <td th:text="${pizza.price}">price</td>
+                <td><a th:href="@{${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/metro/26/000000/pencil.png"></a> </td>
+                <td><a th:href="@{'delete/' + ${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a> </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-md-3" style="margin-top: 50px; float: right;">
+        <form th:object="${pizza}" th:action="@{/pizza/}" method="post">
 
-    </table>
+            <input type="hidden" th:field="*{id}" id="id" placeholder="price">
 
-    <a href="add">
-        <button type="button" class="custom-button btn btn-lg btn-primary">Add Pizza</button>
-    </a>
+            <label for="price">Price</label>
+            <input type="number" th:field="*{price}" id="price" placeholder="price">
+            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+            <br>
+
+            <label for="size">Size</label>
+            <input type="number" th:field="*{size}" id="size" placeholder="size">
+            <span th:if="${#fields.hasErrors('size')}" th:errors="*{size}"></span>
+            <br>
+
+            <label for="info">info</label>
+            <input type="text" th:field="*{info}" id="info" placeholder="info">
+            <br>
+            <input type="submit" value="Add Pizza">
+
+        </form>
+    </div>
 
 
 </main>

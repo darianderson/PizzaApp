@@ -11,47 +11,30 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("drink/")
 public class DrinkController {
+    private static final String DRINK_VIEW = "drink";
+
+    private static final String REDIRECT_DRINK = "redirect:/drink/";
 
     @Autowired
-    DrinkDAO drinkDao;
+    DrinkDAO drinkDAO;
 
-    @GetMapping("/")
-    public ModelAndView getDrinkIndex() {
-        ModelAndView modelAndView = new ModelAndView("index-drink");
-        modelAndView.addObject("drinks", drinkDao.get());
-        return modelAndView;
+    @GetMapping({"/", "/{id}"})
+    public String getPizza(@PathVariable(required = false) Integer id, Model model) {
+        model.addAttribute("drinks", drinkDAO.get());
+        model.addAttribute("drink", id != null ? drinkDAO.get(id) : new Drink());
+        return DRINK_VIEW;
     }
 
-    @GetMapping("add")
-    public ModelAndView getAddPage() {
-        ModelAndView modelAndView = new ModelAndView("add-drink");
-        modelAndView.addObject("drink", new Drink());
-        return modelAndView;
+    @PostMapping("/")
+    public ModelAndView savePizza(Drink drink) {
+        drinkDAO.add(drink);
+        return new ModelAndView(REDIRECT_DRINK);
     }
 
-    @PostMapping("add")
-    public ModelAndView addDrink(Drink drink) {
-        drinkDao.add(drink);
-        return new ModelAndView("redirect:/drink/");
+    @GetMapping("delete/{id}")
+    public ModelAndView deletePizza(@PathVariable int id) {
+        drinkDAO.delete(id);
+        return new ModelAndView(REDIRECT_DRINK);
     }
 
-    @GetMapping("/edit/{id}")
-    public String getEditDrinkPage(@PathVariable("id") int id, Model model) {
-        Drink drink = drinkDao.get(id);
-
-        model.addAttribute("drink", drink);
-        return "add-drink";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String updateDrink(Drink drink, Model model) {
-        drinkDao.add(drink);
-        return "redirect:/drink/";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteDrink(@PathVariable("id") int id) {
-        drinkDao.delete(id);
-        return "redirect:/drink/";
-    }
 }

@@ -3,7 +3,7 @@
     border-collapse: collapse;
     margin: auto;
     margin-top: 30px;
-    width: 60%;
+    width: 100%;
 }
 
 .custom-table td, .custom-table th {
@@ -55,5 +55,9 @@ input[type=submit]:hover {
 
 div {
     border-radius: 5px;
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
+}
+
+a{
+    text-decoration: none !important;
 }

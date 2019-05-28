@@ -12,11 +12,4 @@ public class HomeController {
         return new ModelAndView("redirect:/pizza/");
     }
 
-
-    @GetMapping("/login")
-    public ModelAndView login(){
-        return new ModelAndView("login-view");
-    }
-
-
 }
