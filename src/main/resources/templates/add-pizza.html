@@ -14,22 +14,27 @@
 <body>
 <main role="main" class="container">
 
-    <div class="starter-template">
-        <span th:text="${username}">User is logged in: </span> <a href="/logout">Logout</a>
-    </div>
 
+    <form action="#" th:object="${pizza}" method="post">
 
-    <form method="post">
-        INFO:
-        <input name="info"><br>
-        SIZE:
-        <input name="size" type="number"><br>
-        NUMBER:
-        <input name="price" type="number">
+        <input type="hidden" th:field="*{id}" id="id" placeholder="price">
+
+        <label for="price">Price</label>
+        <input type="number" th:field="*{price}" id="price" placeholder="price">
+        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
         <br>
-        <input type="submit">
-    </form>
 
+        <label for="size">Size</label>
+        <input type="number" th:field="*{size}" id="size" placeholder="size">
+        <span th:if="${#fields.hasErrors('size')}" th:errors="*{size}"></span>
+        <br>
+
+        <label for="info">info</label>
+        <input type="text" th:field="*{info}" id="info" placeholder="info">
+        <br>
+        <input type="submit" value="Add Pizza">
+
+    </form>
     <a href="/pizza/">home</a>
 
 

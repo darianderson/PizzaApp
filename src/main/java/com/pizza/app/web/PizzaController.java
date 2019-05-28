@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -42,7 +44,9 @@ public class PizzaController {
     @GetMapping("add")
     public ModelAndView getAddPizza() {
         LOGGER.info("Returning page for getting pizza.");
-        return new ModelAndView("add-pizza");
+        ModelAndView modelAndView = new ModelAndView("add-pizza");
+        modelAndView.addObject("pizza", new Pizza());
+        return modelAndView;
     }
 
     @PostMapping("add")
@@ -52,17 +56,24 @@ public class PizzaController {
         return new ModelAndView(REDIRECT_INDEX);
     }
 
-    @GetMapping("delete")
-    public ModelAndView deletePizza(int id) {
+    @GetMapping("delete/{id}")
+    public ModelAndView deletePizza(@PathVariable int id) {
         LOGGER.info("Deleting pizza: {}", id);
         pizzaDAO.delete(id);
         return new ModelAndView(REDIRECT_INDEX);
     }
 
-    @GetMapping("/order")
-    public ModelAndView orderPizza(int id) {
-        // TODO implement order
-        return null;
+    @GetMapping("/edit/{id}")
+    public String getEditDrinkPage(@PathVariable("id") int id, Model model) {
+        Pizza pizza = pizzaDAO.get(id);
+
+        model.addAttribute("pizza", pizza);
+        return "add-pizza";
     }
 
+    @PostMapping("/edit/{id}")
+    public String editPizza(Pizza drink, Model model) {
+        pizzaDAO.add(drink);
+        return REDIRECT_INDEX;
+    }
 }

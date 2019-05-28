@@ -1,6 +1,6 @@
 package com.pizza.app;
 
-import com.pizza.app.dao.PizzaDAOImpl;
+import com.pizza.app.dao.impl.PizzaDAOImpl;
 import com.pizza.app.entity.Pizza;
 import org.junit.Test;
 import org.junit.runner.RunWith;
