@@ -29,7 +29,7 @@ public class PizzaController {
     @Autowired
     private PizzaDAO pizzaDAO;
 
-    @GetMapping
+    @GetMapping("/")
     public ModelAndView getPizza() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
@@ -72,8 +72,8 @@ public class PizzaController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editPizza(Pizza drink, Model model) {
-        pizzaDAO.add(drink);
+    public String editPizza(@PathVariable("id") int id, Pizza pizza, Model model) {
+        pizzaDAO.add(pizza);
         return REDIRECT_INDEX;
     }
 }

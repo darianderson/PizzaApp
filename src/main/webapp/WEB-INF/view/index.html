@@ -5,42 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Spring Boot Thymeleaf Hello World Example</title>
-    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+
+    <link th:insert="snippets/header.html :: links"></linkth:insert>
 
 </head>
 
 <body>
 <main role="main" class="container">
 
-    <div class="starter-template">
-        <span th:text="${username}">User is logged in: </span> <a href="/logout">Logout</a>
-    </div>
+    <header th:insert="snippets/header.html :: header"></header>
+    <script>$("#ul-pizza").addClass("active")</script>
 
-    <h1>Pizza</h1>
-    <table>
+    <table class="custom-table">
         <tr>
             <th>id</th>
             <th>Name</th>
             <th>Size</th>
             <th>Price</th>
+            <th>edit</th>
+            <th>delete</th>
         </tr>
         <tr th:each="pizza: ${pizzas}">
             <td th:text="${pizza.id}">id</td>
             <td th:text="${pizza.info}">info</td>
             <td th:text="${pizza.size}">size</td>
             <td th:text="${pizza.price}">price</td>
-            <td><a th:href="@{'edit/' + ${pizza.id}}">edit</a> </td>
-            <td><a th:href="@{'delete/' + ${pizza.id}}">delete</a> </td>
+            <td><a th:href="@{'edit/' + ${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/metro/26/000000/pencil.png"></a> </td>
+            <td><a th:href="@{'delete/' + ${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a> </td>
         </tr>
 
     </table>
 
-    <a href="add">Add Pizza</a>
+    <a href="add">
+        <button type="button" class="custom-button btn btn-lg btn-primary">Add Pizza</button>
+    </a>
 
 
 </main>
-<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
 </body>
 </html>

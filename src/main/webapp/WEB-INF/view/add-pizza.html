@@ -5,17 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Spring Boot Thymeleaf Hello World Example</title>
-    <!-- https://www.mkyong.com/spring-boot/spring-boot-hello-world-example-thymeleaf/ -->
-    <link rel="stylesheet" th:href="@{webjars/bootstrap/4.2.1/css/bootstrap.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+
+
+    <link th:insert="snippets/header.html :: links"></linkth:insert>
 
 </head>
 
 <body>
 <main role="main" class="container">
 
+    <header th:insert="snippets/header.html :: header"></header>
 
-    <form action="#" th:object="${pizza}" method="post">
+    <div class="col-md-4" style="margin-top: 30px;">
+    <form th:object="${pizza}" method="post">
 
         <input type="hidden" th:field="*{id}" id="id" placeholder="price">
 
@@ -35,10 +37,7 @@
         <input type="submit" value="Add Pizza">
 
     </form>
-    <a href="/pizza/">home</a>
-
-
+    </div>
 </main>
-<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
 </body>
 </html>
