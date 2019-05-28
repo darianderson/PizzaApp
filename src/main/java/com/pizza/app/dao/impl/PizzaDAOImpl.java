@@ -2,9 +2,7 @@ package com.pizza.app.dao.impl;
 
 import com.pizza.app.dao.PizzaDAO;
 import com.pizza.app.dao.mapper.PizzaRowMapper;
-import com.pizza.app.entity.Drink;
 import com.pizza.app.entity.Pizza;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;

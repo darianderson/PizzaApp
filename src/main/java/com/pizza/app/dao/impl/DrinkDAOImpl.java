@@ -3,7 +3,6 @@ package com.pizza.app.dao.impl;
 import com.pizza.app.dao.DrinkDAO;
 import com.pizza.app.dao.mapper.DrinkRowMapper;
 import com.pizza.app.entity.Drink;
-import com.pizza.app.entity.Pizza;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
