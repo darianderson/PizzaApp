@@ -27,6 +27,7 @@
                 <th>Price</th>
                 <th>edit</th>
                 <th>delete</th>
+                <th>order</th>
             </tr>
             <tr th:each="pizza: ${pizzas}">
                 <td th:text="${pizza.id}">id</td>
@@ -35,6 +36,7 @@
                 <td th:text="${pizza.price}">price</td>
                 <td><a th:href="@{${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/metro/26/000000/pencil.png"></a> </td>
                 <td><a th:href="@{'delete/' + ${pizza.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a> </td>
+                <td><a th:href="@{/order/create?type=pizza&productId={id}(id=${pizza.id})}"><img th:width="25px" src="https://img.icons8.com/dotty/80/000000/add-shopping-cart.png"></a></td>
             </tr>
         </table>
     </div>

@@ -1,8 +1,10 @@
 package com.pizza.app.dao.mapper;
 
+import com.pizza.app.entity.Drink;
 import com.pizza.app.entity.Order;
 import com.pizza.app.entity.Pizza;
 import com.pizza.app.entity.User;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -20,13 +22,21 @@ public class OrderRowMapper implements RowMapper<Order> {
         user.setUsername(username);
         order.setUser(user);
 
-        Pizza pizza = new Pizza();
-        pizza.setId(resultSet.getInt("idPizza"));
-        pizza.setInfo(resultSet.getString("info"));
-        pizza.setSize(resultSet.getInt("size"));
-        pizza.setPrice(resultSet.getInt("price"));
-        order.setPizza(pizza);
-
+        String productType = resultSet.getString("productType");
+        if (Pizza.TYPE.equals(productType)) {
+            Pizza pizza = new Pizza();
+            pizza.setId(resultSet.getInt("idProduct"));
+            pizza.setInfo(resultSet.getString("info"));
+            pizza.setSize(resultSet.getInt("size"));
+            pizza.setPrice(resultSet.getInt("pizzaPrice"));
+            order.setPizza(pizza);
+        } else if (Drink.TYPE.equals(productType)) {
+            Drink drink = new Drink();
+            drink.setId(resultSet.getInt("idProduct"));
+            drink.setName(resultSet.getString("name"));
+            drink.setPrice(resultSet.getInt("drinkPrice"));
+            order.setDrink(drink);
+        }
         return order;
     }
 }

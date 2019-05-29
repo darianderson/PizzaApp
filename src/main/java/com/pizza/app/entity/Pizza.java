@@ -6,6 +6,9 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class Pizza {
+
+    public static final String TYPE = "pizza";
+
     private int id;
     private String info;
     private int size;

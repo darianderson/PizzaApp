@@ -17,11 +17,12 @@ import java.util.List;
 @Repository
 public class OrderDAOImpl implements OrderDAO {
 
-    private static final String SQL_ADD = "insert into orders(id,idPizza,idClient) values(?,?,?)";
-    private static final String SQL_UPDATE = "update orders set status=?, idPizza=?,idClient=? where id=?";
-    private static final String SQL_GET_LIST = "SELECT orders.*, pizza.* FROM orders, pizza WHERE pizza.id=orders.idPizza";
+    private static final String SQL_ADD = "insert into orders(productType,idProduct,idClient) values(?,?,?)";
+    private static final String SQL_UPDATE = "update orders set status=?, productType=?, idProduct=?, idClient=? where id=?";
+    private static final String SQL_GET_LIST = "SELECT orders.*, pizza.id, pizza.price as 'pizzaPrice', pizza.size, pizza.info, drink.*," +
+            " drink.price as 'drinkPrice' FROM orders, pizza, drink WHERE pizza.id=orders.idProduct and orders.idProduct=drink.id;";
     private static final String SQL_DELETE = "delete from orders where id = ?";
-    private static final String SQL_GET_ORDER = "SELECT orders.*, pizza.* FROM orders, pizza WHERE pizza.id=orders.idPizza and orders.id=?";
+    private static final String SQL_GET_ORDER = SQL_GET_LIST + " and orders.id=?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -52,10 +53,12 @@ public class OrderDAOImpl implements OrderDAO {
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_UPDATE, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, order.getStatus());
-            ps.setInt(2, order.getPizza().getId());
-            ps.setString(3, order.getUser().getUsername());
-            ps.setInt(4, order.getId());
+            int i = 1;
+            ps.setInt(i++, order.getStatus());
+            ps.setString(i++, order.getPizza() == null ? "drink" : "pizza");
+            ps.setInt(i++, order.getPizza() == null ? order.getDrink().getId() : order.getPizza().getId());
+            ps.setString(i++, order.getUser().getUsername());
+            ps.setInt(i, order.getId());
             return ps;
         }, holder);
     }
@@ -68,9 +71,10 @@ public class OrderDAOImpl implements OrderDAO {
     private PreparedStatementCreator generatePreparedStatementCreator(final Order order, final String sql) {
         return connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, order.getId());
-            ps.setString(2, order.getUser().getUsername());
-            ps.setInt(3, order.getPizza().getId());
+            int i = 1;
+            ps.setString(i++, order.getPizza() == null ? "drink" : "pizza");
+            ps.setInt(i++, order.getPizza() == null ? order.getDrink().getId() : order.getPizza().getId());
+            ps.setString(i,  order.getUser().getUsername());
             return ps;
         };
     }

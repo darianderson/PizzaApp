@@ -1,15 +1,18 @@
 package com.pizza.app.web;
 
 import com.pizza.app.dao.OrderDAO;
+import com.pizza.app.entity.Drink;
 import com.pizza.app.entity.Order;
+import com.pizza.app.entity.Pizza;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,6 +39,25 @@ public class OrderController {
         Order order = orderDAO.get(id);
         order.setStatus(1);
         orderDAO.add(order);
+        return new ModelAndView(REDIRECT_ORDER);
+    }
+
+    @GetMapping("/create")
+    public ModelAndView createOrder(String type, int productId) {
+        Order order = new Order();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        order.setUsername(user.getUsername());
+        if (Drink.TYPE.equals(type)) {
+            Drink drink = new Drink();
+            drink.setId(productId);
+            order.setDrink(drink);
+        } else if (Pizza.TYPE.equals(type)) {
+            Pizza pizza = new Pizza();
+            pizza.setId(productId);
+            order.setPizza(pizza);
+        }
+        orderDAO.add(order);
+
         return new ModelAndView(REDIRECT_ORDER);
     }
 

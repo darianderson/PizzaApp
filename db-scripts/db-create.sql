@@ -44,11 +44,10 @@ CREATE TABLE drink(
 CREATE TABLE orders(
 	id INTEGER AUTO_INCREMENT NOT NULL PRIMARY KEY,
 	status INTEGER default 0,
-    idPizza INTEGER NOT NULL,
+	productType VARCHAR(16) NOT NULL,
+    idProduct INTEGER NOT NULL,
     idClient varchar(50) NOT NULL,
-    INDEX FK_orders_idPizza (idPizza),
     INDEX FK_orders_idClient (idClient),
-	CONSTRAINT FK_orders_idPizza FOREIGN KEY (idPizza) REFERENCES pizza (id) ON DELETE CASCADE ON update cascade,
     CONSTRAINT FK_orders_idClient FOREIGN KEY (idClient) REFERENCES users (username) ON DELETE CASCADE ON update cascade
 )ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -63,5 +62,5 @@ INSERT INTO authorities VALUES
 
 INSERT INTO pizza VALUES (1,'meat', 35, 85), (2,'paper', 35, 70), (3,'chiken', 35, 75), (4,'marshmallow', 35, 65);
 INSERT INTO drink VALUES (1,12 ,'pepsi' ), (2,14,'coca-cola'), (3,10,'fanta' ), (4, 10,'sprite');
-INSERT INTO orders VALUES (1,0,1,'test'), (2,0,3,'test');
-INSERT INTO orders VALUES (3,0,4,'admin'), (4,0,3,'test');
+INSERT INTO orders VALUES (default,0,"pizza",1,'test'), (default ,0,"pizza",3,'test');
+INSERT INTO orders VALUES (default,0,"pizza",4,'admin'), (default ,0,"pizza",3,'test'), (default ,0,'drink',1,'test');

@@ -3,6 +3,7 @@ package com.pizza.app.web;
 import com.pizza.app.dao.UserDAO;
 import com.pizza.app.dao.impl.UserDAOImpl;
 import com.pizza.app.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class UserController {
 
     @PostMapping("/")
     public ModelAndView saveUser(User user) {
-        userDAO.add(user);
+        if (StringUtils.isNotBlank(user.getUsername()) && userDAO.get(user.getUsername()) != null)
+            userDAO.add(user);
         return new ModelAndView(REDIRECT_INDEX);
     }
 

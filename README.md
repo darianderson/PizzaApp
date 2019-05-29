@@ -1,6 +1,6 @@
 # PizzaApp
 Simple app to order pizza online.
-#### version: __0.2.0-SNAPSHOT__
+#### version: __0.2.0__
 
 ### Get started
 
@@ -16,15 +16,7 @@ Simple app to order pizza online.
 1. Check database connection. Got to persistence-mysql.properties in resources and setup proper user and password for db connection.
 1. Run PizzaAppApplication.class
 
-### Tasks for version 0.2:
-- [x] Create OrderDAOImpl
-- [x] Extend users table in db (add more columns with data)
-- [x] Create UserDAOImpl
-- [x] Create User page
-- [x] Add ability to edit users data on user page
-- [ ] Add order button to pizza and drinks table
-- [ ] Add ability to order pizza and table
-- [x] Add order page
+
 
 ### Default user
 
@@ -40,3 +32,16 @@ Thank you Daria, you my beast open source angel. <br>
 ### Authors
 [darianderson](https://github.com/darianderson) main creator <br>
 [dmitryblackwell](https://github.com/dmitryblackwell) was here =)
+
+
+### Development History
+
+##### Tasks for version 0.2:
+- [x] Create OrderDAOImpl
+- [x] Extend users table in db (add more columns with data)
+- [x] Create UserDAOImpl
+- [x] Create User page
+- [x] Add ability to edit users data on user page
+- [x] Add order button to pizza and drinks table
+- [x] Add ability to order pizza and drinks
+- [x] Add order page
