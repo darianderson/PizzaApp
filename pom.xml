@@ -11,7 +11,6 @@
 	<groupId>com.pizza.app</groupId>
 	<artifactId>PizzaApp</artifactId>
 	<version>0.2.0</version>
-	<name>PizzaApp</name>
 	<description>Pizza project for Spring Boot</description>
 
 	<properties>
