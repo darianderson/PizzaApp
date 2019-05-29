@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Spring Boot Thymeleaf Hello World Example</title>
+
+
+    <link th:insert="snippets/header.html :: links"></linkth:insert>
+
+</head>
+
+<body>
+
+<main role="main" class="container">
+
+    <header th:insert="snippets/header.html :: header"></header>
+    <script>$("#ul-drinks").addClass("active")</script>
+
+    <div class="col-md-8" style="margin-top: 30px;">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Price</th>
+                <th>Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Buy</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="drink : ${drinks}">
+                <td th:text="${drink.id}"></td>
+                <td th:text="${drink.price}"></td>
+                <td th:text="${drink.name}"></td>
+                <td><a th:href="@{{id}(id=${drink.id})}"><img th:width="25px" src="https://img.icons8.com/metro/26/000000/pencil.png"></a></td>
+                <td><a th:href="@{delete/{id}(id=${drink.id})}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a></td>
+                <td><a th:href="@{/order/create?type=drink&productId={id}(id=${drink.id})}"><img th:width="25px" src="https://img.icons8.com/dotty/80/000000/add-shopping-cart.png"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-3" style="margin-top: 50px; float: right;">
+        <form th:object="${drink}" th:action="@{/drink/}" method="post">
+
+            <input type="hidden" th:field="*{id}" id="id" placeholder="price">
+            <label for="price">Price</label>
+            <input type="number" th:field="*{price}" id="price" placeholder="price">
+            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+            <br>
+            <label for="name">Name</label>
+            <input type="text" th:field="*{name}" id="name" placeholder="name">
+            <br>
+            <input type="submit" value="Add Drink">
+
+        </form>
+    </div>
+
+
+</main>
+</body>
+</html>

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pizza.app</groupId>
 	<artifactId>PizzaApp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<name>PizzaApp</name>
 	<description>Pizza project for Spring Boot</description>
 
@@ -84,6 +84,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>5.4.2.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.9</version>
 		</dependency>
 
 

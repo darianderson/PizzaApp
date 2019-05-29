@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <link th:insert="snippets/header.html :: links"></linkth:insert>
+
+</head>
+<body>
+
+<main role="main" class="container">
+
+    <header th:insert="snippets/header.html :: header"></header>
+    <script>$("#ul-orders").addClass("active")</script>
+
+    <div class="col-md-8" style="margin-top: 30px;">
+        <table class="custom-table">
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>Client</th>
+                <th>approve</th>
+                <th>delete</th>
+            </tr>
+            <tr th:each="order: ${orders}">
+                <td th:text="${order.id}">id</td>
+                <td th:text="${order.getProductName()}">info</td>
+                <td th:text="${order.user.username}">order</td>
+                <td><a th:href="@{'/order/'+${order.id}}"><img th:width="25px" th:src="(${order.status} == 1) ? 'https://img.icons8.com/cotton/64/000000/checkmark.png' : 'https://img.icons8.com/dotty/80/000000/ok.png'"></a></td>
+                <td><a th:href="@{'/order/delete/'+${order.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a></td>
+            </tr>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

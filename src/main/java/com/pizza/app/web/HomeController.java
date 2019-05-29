@@ -7,16 +7,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller("/")
 public class HomeController {
 
-    @GetMapping
+    @GetMapping("/")
     public ModelAndView home() {
         return new ModelAndView("redirect:/pizza/");
     }
-
-
-    @GetMapping("/login")
-    public ModelAndView login(){
-        return new ModelAndView("login-view");
-    }
-
 
 }

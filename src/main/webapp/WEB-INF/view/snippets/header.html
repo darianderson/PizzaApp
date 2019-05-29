@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headerfiles">
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <div th:fragment="header">
+        <div class="header">
+            <a href="/pizza/" class="logo">PizzaApp</a>
+            <div class="header-right">
+                <a id="ul-pizza"  href="/pizza/">Pizza</a>
+                <a id="ul-drinks" href="/drink/">Drinks</a>
+                <a id="ul-orders" href="/order/">Orders</a>
+                <a id="ul-users" href="/user/"><span th:text="${#authentication.getPrincipal().getUsername()}"></span></a>
+                <a href="/logout">logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:fragment="links">
+        <link rel="stylesheet" th:href="@{/resources/css/main.css}"/>
+        <link rel="stylesheet" th:href="@{/resources/css/header.css}"/>
+        <link rel="stylesheet" th:href="@{/resources/css/bootstrap.min.css}"/>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </div>
+</body>
+</html>

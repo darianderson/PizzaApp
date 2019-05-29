@@ -2,12 +2,13 @@ package com.pizza.app.entity;
 
 import lombok.*;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
+@NoArgsConstructor
+@Data
 public class Pizza {
+
+    public static final String TYPE = "pizza";
+
     private int id;
     private String info;
     private int size;

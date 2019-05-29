@@ -6,10 +6,10 @@ import com.pizza.app.entity.Pizza;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,48 +21,29 @@ public class PizzaController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PizzaController.class);
 
     private static final String INDEX = "index";
-    private static final String REDIRECT_INDEX = "redirect:/";
-
+    private static final String REDIRECT_INDEX = "redirect:/pizza/";
 
     @Autowired
     private PizzaDAO pizzaDAO;
 
-    @GetMapping
-    public ModelAndView getPizza() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-
-        ModelAndView modelAndView = new ModelAndView(INDEX);
-        modelAndView.addObject("pizzas", pizzaDAO.get());
-
-        modelAndView.addObject("username", username);
-        return modelAndView;
+    @GetMapping({"/", "/{id}"})
+    public String getPizza(@PathVariable(required = false) Integer id, Model model) {
+        model.addAttribute("pizzas", pizzaDAO.get());
+        model.addAttribute("pizza", id != null ? pizzaDAO.get(id) : new Pizza());
+        return INDEX;
     }
 
-    @GetMapping("add")
-    public ModelAndView getAddPizza() {
-        LOGGER.info("Returning page for getting pizza.");
-        return new ModelAndView("add-pizza");
-    }
-
-    @PostMapping("add")
-    public ModelAndView addPizza(Pizza pizza) {
-        LOGGER.info("Adding pizza: [{}]", pizza);
+    @PostMapping("/")
+    public ModelAndView savePizza(Pizza pizza) {
         pizzaDAO.add(pizza);
         return new ModelAndView(REDIRECT_INDEX);
     }
 
-    @GetMapping("delete")
-    public ModelAndView deletePizza(int id) {
+    @GetMapping("delete/{id}")
+    public ModelAndView deletePizza(@PathVariable int id) {
         LOGGER.info("Deleting pizza: {}", id);
         pizzaDAO.delete(id);
         return new ModelAndView(REDIRECT_INDEX);
-    }
-
-    @GetMapping("/order")
-    public ModelAndView orderPizza(int id) {
-        // TODO implement order
-        return null;
     }
 
 }
