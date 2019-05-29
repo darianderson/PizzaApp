@@ -6,13 +6,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Order {
+
     private int id;
-    //    private int idSender;
-    private String idClient;
-//        private Timestamp datetime;
-//    private int idCourier;
+    private int status;
+
+    private Pizza pizza;
+    private User user;
+
 //    private int idCar;
-
-    private int idPizza;
-
+//    private int idCourier;
+//    private Timestamp datetime;
+//    private int idSender;
 }

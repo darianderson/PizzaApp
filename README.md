@@ -17,14 +17,14 @@ Simple app to order pizza online.
 1. Run PizzaAppApplication.class
 
 ### Tasks for version 0.2:
-- [ ] Create OrderDAOImpl
-- [ ] Extend users table in db (add more columns with data)
-- [ ] Create UserDAOImpl
-- [ ] Create User page
-- [ ] Add ability to edit users data on user page
+- [x] Create OrderDAOImpl
+- [x] Extend users table in db (add more columns with data)
+- [x] Create UserDAOImpl
+- [x] Create User page
+- [x] Add ability to edit users data on user page
 - [ ] Add order button to pizza and drinks table
 - [ ] Add ability to order pizza and table
-- [ ] Add order page
+- [x] Add order page
 
 ### Default user
 

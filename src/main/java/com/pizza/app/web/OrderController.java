@@ -18,29 +18,31 @@ import org.springframework.web.servlet.ModelAndView;
 public class OrderController {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
-    private static final String INDEX = "index";
-    private static final String REDIRECT_INDEX = "redirect:/order/"; //  redirect:/pizza/
+    private static final String ORDER = "order";
+    private static final String REDIRECT_ORDER = "redirect:/order/"; //  redirect:/pizza/
 
     @Autowired
     private OrderDAO orderDAO;
 
-    @GetMapping({"/", "/{id}"})
-    public String getPizza(@PathVariable(required = false) Integer id, Model model) {
+    @GetMapping("/")
+    public String getOrder(@PathVariable(required = false) Integer id, Model model) {
         model.addAttribute("orders", orderDAO.get());
         model.addAttribute("order", id != null ? orderDAO.get(id) : new Order());
-        return INDEX;
+        return ORDER;
     }
 
-    @PostMapping("/")
-    public ModelAndView savePizza(Order order) {
+    @GetMapping("/{id}")
+    public ModelAndView approve(@PathVariable Integer id) {
+        Order order = orderDAO.get(id);
+        order.setStatus(1);
         orderDAO.add(order);
-        return new ModelAndView(REDIRECT_INDEX);
+        return new ModelAndView(REDIRECT_ORDER);
     }
 
     @GetMapping("delete/{id}")
-    public ModelAndView deletePizza(@PathVariable int id) {
+    public ModelAndView deleteOrder(@PathVariable int id) {
         LOGGER.info("Deleting order: {}", id);
         orderDAO.delete(id);
-        return new ModelAndView(REDIRECT_INDEX);
+        return new ModelAndView(REDIRECT_ORDER);
     }
 }

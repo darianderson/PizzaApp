@@ -18,10 +18,10 @@ import java.util.List;
 public class OrderDAOImpl implements OrderDAO {
 
     private static final String SQL_ADD = "insert into orders(id,idPizza,idClient) values(?,?,?)";
-    private static final String SQL_UPDATE = "update orders set idPizza=?,idClient=? where id=?";
-    private static final String SQL_GET_LIST = "SELECT orders.id,orders.idClient, pizza.info FROM orders, pizza WHERE pizza.id=orders.idPizza; ";
+    private static final String SQL_UPDATE = "update orders set status=?, idPizza=?,idClient=? where id=?";
+    private static final String SQL_GET_LIST = "SELECT orders.*, pizza.* FROM orders, pizza WHERE pizza.id=orders.idPizza";
     private static final String SQL_DELETE = "delete from orders where id = ?";
-    private static final String SQL_GET_ORDER = "select * from orders where id=?";
+    private static final String SQL_GET_ORDER = "SELECT orders.*, pizza.* FROM orders, pizza WHERE pizza.id=orders.idPizza and orders.id=?";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -52,9 +52,10 @@ public class OrderDAOImpl implements OrderDAO {
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_UPDATE, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, order.getIdClient());
-            ps.setInt(2, order.getIdPizza());
-            ps.setInt(3, order.getId());
+            ps.setInt(1, order.getStatus());
+            ps.setInt(2, order.getPizza().getId());
+            ps.setString(3, order.getUser().getUsername());
+            ps.setInt(4, order.getId());
             return ps;
         }, holder);
     }
@@ -68,8 +69,8 @@ public class OrderDAOImpl implements OrderDAO {
         return connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, order.getId());
-            ps.setString(2, order.getIdClient());
-            ps.setInt(3, order.getIdPizza());
+            ps.setString(2, order.getUser().getUsername());
+            ps.setInt(3, order.getPizza().getId());
             return ps;
         };
     }

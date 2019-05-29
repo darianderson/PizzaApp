@@ -18,16 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("user/")
 public class UserController {
 
-//    @GetMapping("{username}")
-//    public ModelAndView user(@PathVariable String username) {
-//        // TODO create userview
-//        // TODO get user
-//        // TODO set it into model
-//        // TODO return it
-//        return null;
-//    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PizzaController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private static final String USER_VIEW = "user";
     private static final String REDIRECT_INDEX = "redirect:/user/";
@@ -53,7 +44,6 @@ public class UserController {
         userDAO.updateUser(user);
         return new ModelAndView(REDIRECT_INDEX);
     }
-
 
     @GetMapping("delete/{username}")
     public ModelAndView deleteUser(@PathVariable String username) {
