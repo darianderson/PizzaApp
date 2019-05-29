@@ -12,5 +12,6 @@ public class User {
     private String secondName;
     private String phoneNumber;
     private String address;
+
     private Role[] roles;
 }

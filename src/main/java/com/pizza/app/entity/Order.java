@@ -7,7 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class Order {
     private int id;
-    private User client;
-    private User courier;
+    //    private int idSender;
+    private String idClient;
+//        private Timestamp datetime;
+//    private int idCourier;
+//    private int idCar;
+
+    private int idPizza;
 
 }
