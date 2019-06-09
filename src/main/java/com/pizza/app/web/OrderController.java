@@ -7,14 +7,20 @@ import com.pizza.app.entity.Pizza;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("order/")
@@ -29,7 +35,16 @@ public class OrderController {
 
     @GetMapping("/")
     public String getOrder(@PathVariable(required = false) Integer id, Model model) {
-        model.addAttribute("orders", orderDAO.get());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        boolean isAdmin = ((UserDetails)principal).getAuthorities().stream().
+                anyMatch((Predicate<GrantedAuthority>) grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        List<Order> orders = orderDAO.get();
+        if (!isAdmin) {
+            orders = orders.stream().filter(order -> username.equals(order.getUser().getUsername()))
+                    .collect(Collectors.toList());
+        }
+        model.addAttribute("orders", orders);
         model.addAttribute("order", id != null ? orderDAO.get(id) : new Order());
         return ORDER;
     }

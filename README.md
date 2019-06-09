@@ -6,7 +6,7 @@ Simple app to order pizza online.
 
 1. Download or Clone project:
     ```
-    git clone https://github.com/darianderson/PizzaApp
+    git clone https://github.com/darianderson/PizzaApp.git
     ``` 
 1. SetUp database with script in `db-scripts` folder.
 1. Import project as Maven:

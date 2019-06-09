@@ -19,8 +19,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     private static final String SQL_ADD = "insert into orders(productType,idProduct,idClient) values(?,?,?)";
     private static final String SQL_UPDATE = "update orders set status=?, productType=?, idProduct=?, idClient=? where id=?";
-    private static final String SQL_GET_LIST = "SELECT orders.*, pizza.id, pizza.price as 'pizzaPrice', pizza.size, pizza.info, drink.*," +
-            " drink.price as 'drinkPrice' FROM orders, pizza, drink WHERE pizza.id=orders.idProduct and orders.idProduct=drink.id;";
+    private static final String SQL_GET_LIST = "SELECT orders.*, pizza.id, pizza.price as 'pizzaPrice', pizza.size, pizza.info, drink.*,drink.price as 'drinkPrice' FROM orders, pizza, drink WHERE pizza.id=orders.idProduct and orders.idProduct=drink.id";
     private static final String SQL_DELETE = "delete from orders where id = ?";
     private static final String SQL_GET_ORDER = SQL_GET_LIST + " and orders.id=?";
 

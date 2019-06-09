@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -20,7 +21,9 @@ import java.util.List;
 @Repository
 public class UserDAOImpl implements UserDAO {
 
-    private static final String SQL_ADD = "insert into users(username,firstName,secondName,phoneNumber,address,email) values(?,?,?,?,?,?)";
+    private static final String SQL_CREATE = "INSERT INTO users(username, firstName, secondName, phoneNumber,address, email,password) values(?,?,?,?,?,?,?)";
+    private static final String SQL_ADD = "insert into users(username,firstName,secondName,phoneNumber,address,email,password) values(?,?,?,?,?,?,?)";
+    private static final String SQL_ADD_ROLE = "insert into authorities values(?,'ROLE_USER')";
     private static final String SQL_UPDATE = "update users set firstName=?,secondName=?,phoneNumber=?,address=?,email=?  where username=?";
     private static final String SQL_GET_LIST = "select * from users";
     private static final String SQL_DELETE = "delete from users where username = ?";
@@ -28,7 +31,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
 
     @Override
     public List<User> get() {
@@ -48,12 +50,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void add(User user) {
-        if (user.getUsername() != null && get(user.getUsername()) != null) {
-            update(user);
-            return;
-        }
         KeyHolder holder = new GeneratedKeyHolder();
-        jdbcTemplate.update(generatePreparedStatementCreator(user, SQL_ADD), holder);
+        jdbcTemplate.update(generatePreparedStatementCreator(user, SQL_ADD), holder); // sql_add
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(SQL_ADD_ROLE, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getUsername());
+            return ps;
+        }, holder); // sql_add
+
     }
 
     @Override
@@ -100,8 +104,10 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(2, user.getFirstName());
             ps.setString(3, user.getSecondName());
             ps.setString(4, user.getPhoneNumber());
-            ps.setString(6, user.getAddress());
+            ps.setString(5, user.getAddress());
             ps.setString(6, user.getEmail());
+            ps.setString(7, "{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword())); // changes
+            //new BCryptPasswordEncoder().encode
             return ps;
         };
     }

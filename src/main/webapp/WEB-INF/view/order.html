@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,15 +21,16 @@
                 <th>id</th>
                 <th>name</th>
                 <th>Client</th>
-                <th>approve</th>
-                <th>delete</th>
+                <th>is approved</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">action</th>
             </tr>
             <tr th:each="order: ${orders}">
                 <td th:text="${order.id}">id</td>
                 <td th:text="${order.getProductName()}">info</td>
                 <td th:text="${order.user.username}">order</td>
-                <td><a th:href="@{'/order/'+${order.id}}"><img th:width="25px" th:src="(${order.status} == 1) ? 'https://img.icons8.com/cotton/64/000000/checkmark.png' : 'https://img.icons8.com/dotty/80/000000/ok.png'"></a></td>
-                <td><a th:href="@{'/order/delete/'+${order.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a></td>
+                <td th:text="${order.status} == 1 ? 'approved' : 'not approved'"></td>
+                <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/order/'+${order.id}}"><img th:width="25px" th:src="(${order.status} == 1) ? 'https://img.icons8.com/cotton/64/000000/checkmark.png' : 'https://img.icons8.com/dotty/80/000000/ok.png'"></a>
+                <a th:href="@{'/order/delete/'+${order.id}}"><img th:width="25px" src="https://img.icons8.com/ios/50/000000/trash-filled.png"></a></td>
             </tr>
         </table>
     </div>
